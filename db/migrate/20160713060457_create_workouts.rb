@@ -1,7 +1,6 @@
-class CreatePosts < ActiveRecord::Migration
+class CreateWorkouts < ActiveRecord::Migration
   def change
-    create_table :posts do |t|
-      t.string :run_type
+    create_table :workouts do |t|
       t.float :distance
       t.date :day
       t.string :time
