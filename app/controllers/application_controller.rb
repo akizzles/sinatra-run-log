@@ -34,13 +34,12 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-
   # CREATE A NEW ACCOUNT
   get '/signup' do
     if !logged_in?
       erb :'/runners/create_runner'
     else
-      redirect '/workouts'
+      redirect '/logout'
     end
   end
 
@@ -53,6 +52,15 @@ class ApplicationController < Sinatra::Base
       @runner.save
       session[:runner_id] = @runner.id
       redirect '/workouts'
+    end
+  end
+
+  get '/logout' do
+    if logged_in?
+      session.clear
+      redirect '/login'
+    else
+      redirect '/'
     end
   end
 
@@ -76,9 +84,8 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-
   post '/workouts' do
-    if params[:day] == "" || params[:type] == "" || params[:time] == "" || params[:distance] == ""
+    if params[:day] == "" || params[:type] == ""
       redirect '/workouts/new'
     else
       @workout = Workout.create(day: params[:day], distance: params[:distance], time: params[:time])
@@ -87,21 +94,19 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-
   # VIEW ONLY THE SPECIFIC WORKOUT 
   get '/workouts/:id' do
     puts "This is working..."
   end
 
-
   # HELPER METHODS
   helpers do
     def logged_in?
-      !!session[:user_id]
+      !!session[:runner_id]
     end
 
     def current_user
-      User.find(session[:user_id])
+      Runner.find(session[:runner_id])
     end
   end
 

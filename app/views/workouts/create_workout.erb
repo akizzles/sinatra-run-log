@@ -3,16 +3,29 @@
 <form action="/workouts" method="POST">
 
   <label>Date</label>
-  <input type="text" name="day" id='day'>
+  <input type="date" name="day" id='day'>
 
-  <label>Distance (In Miles)</label>
+  <label>Distance (# Miles)</label>
   <input type="text" name="distance" id='distance'>
 
   <label>Duration (HH:MM:SS)</label>
   <input type="text" name="time" id='time'>
-
-  <label>Run Type</label>
-  <input type="text" name="type" id='type'>
+  <br></br>
+  <label>Please Select One of the Following Run Types:</label><br>
+  <input type="radio" name="type" value="day_off" checked> Day Off<br>
+  <input type="radio" name="type" value="easy_run"> Easy Run<br>
+  <input type="radio" name="type" value="regular_run"> Regular Run<br>
+  <input type="radio" name="type" value="reg_run_ayf"> Regular Run AYF<br>
+  <input type="radio" name="type" value="long_run"> Long Run<br>
+  <input type="radio" name="type" value="pseduo_lr"> Pseudo Long Run<br>
+  <input type="radio" name="type" value="tempo"> Tempo<br>
+  <input type="radio" name="type" value="fartlek"> Fartlek<br>
+  <input type="radio" name="type" value="intervals"> Intervals<br>
+  <input type="radio" name="type" value="hills"> Hills<br>
+  <input type="radio" name="type" value="race"> Race<br>
+  <input type="radio" name="type" value="cross_train"> Cross Train<br>
+  <input type="radio" name="type" value="sick"> Sick<br>
+  <input type="radio" name="type" value="injured"> Injured<br>
 
   <input type="submit" value="submit">
   
