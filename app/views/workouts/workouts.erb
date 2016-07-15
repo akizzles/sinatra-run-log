@@ -1,0 +1,7 @@
+Welcome, <%= current_user.username %>
+<% @workouts.each do |workout| %>
+  <a href='/workouts/<%=workout.id%>'><%= workout.day %></a><br>
+  <%= workout.type %>
+  <%= workout.distance %>
+  <%= workout.time %><br>
+<% end %>
