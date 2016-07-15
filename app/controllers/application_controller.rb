@@ -33,10 +33,36 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/signup' do
-    
+    if !logged_in?
+      erb :'/runners/create_runner'
+    else
+      redirect to "/workouts"
+    end
   end
 
+  post '/signup' do
+    if params[:username] == "" || params[:email] == "" || params[:password] == ""
+      redirect to "/signup"
+    else
+      @runner = Runner.new(username: params[:username], email: params[:email], password: params[:password])
+      @runner.save
+      session[:runner_id] = @runner.id
+      redirect to "/workouts"
+    end
+  end
 
+  get '/workouts' do
+    if logged_in?
+      @workouts = Workout.all
+      erb :'/workouts/workouts'
+    else
+      redirect to "/login"
+    end
+  end
+
+  post '/workouts' do
+    puts "Hello Friend."
+  end
 
   helpers do
     def logged_in?
