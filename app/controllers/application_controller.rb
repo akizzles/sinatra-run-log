@@ -10,6 +10,7 @@ class ApplicationController < Sinatra::Base
 
   # HOME PAGE
   get '/' do
+    session.clear
     erb :index
   end
 
@@ -27,7 +28,7 @@ class ApplicationController < Sinatra::Base
     @runner = Runner.find_by(username: params[:username])
     if @runner && @runner.authenticate(params[:password])
       session[:runner_id] = @runner.id
-      redirect '/workouts/new'
+      redirect '/workouts'
     else
       session[:error] = "An invalid username and/or password was entered. Please retry."
       redirect '/login'
@@ -85,19 +86,68 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/workouts' do
+    puts params
     if params[:day] == "" || params[:type] == ""
       redirect '/workouts/new'
     else
-      @workout = Workout.create(day: params[:day], distance: params[:distance], time: params[:time])
-      @workout.type << RunType.create(type: params[:type])
-      redirect '/workouts/#{@workout.id}'
+      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: current_user.id)
+      @workout.run_types << RunType.new(name: params[:type])
+      session[:workout_id] = @workout.id
+      redirect '/workouts'
     end
+
   end
 
   # VIEW ONLY THE SPECIFIC WORKOUT 
   get '/workouts/:id' do
-    puts "This is working..."
+    if logged_in?
+      @workout = Workout.find_by(id: params[:id])
+      erb :'/workouts/show_workout'
+    else
+      redirect '/login'
+    end
   end
+
+  # EDIT A WORKOUT
+  get '/workouts/:id/edit' do
+    @workout = Workout.find_by(id: params[:id])
+    if logged_in?
+      erb :'/workouts/edit_workout'
+    else
+      redirect '/login'
+    end
+  end
+
+  patch '/workouts/:id' do
+    @workout = Workout.find_by(id: params[:id])
+    @workout.update(params[:workout])
+    @workout.save
+    redirect to "/workouts/#{@workout.id}"
+  end
+
+  # DELETE A WORKOUT
+  delete '/workouts/:id/delete' do
+    @workout = Workout.find_by(id: params[:id])
+    if logged_in? && @workout.runner_id == current_user.id
+      @workout.destroy
+      redirect '/workouts'
+    else
+      redirect '/'
+    end
+  end
+
+
+  # FILTER BY RUN TYPE
+  get '/workouts/:slug' do
+    @workout = Workout.find_by_slug
+    if current_user
+      erb :/
+  end
+
+
+
+
+
 
   # HELPER METHODS
   helpers do

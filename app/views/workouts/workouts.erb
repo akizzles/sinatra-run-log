@@ -1,7 +1,15 @@
-Welcome, <%= current_user.username %>
+<b style="color:blue;"><u>Welcome, <%= current_user.username %></u></b><br>
+
 <% @workouts.each do |workout| %>
-  <a href='/workouts/<%=workout.id%>'><%= workout.day %></a><br>
-  <%= workout.type %>
-  <%= workout.distance %>
-  <%= workout.time %><br>
+  <b>Workout # </b><a href='/workouts/<%=workout.id%>'><%= workout.id %></a><br>
+  <b>Date: </b><%= workout.day %><br>
+  <% workout.run_types.each do |type| %>
+    <b>Run Type:</b>  <%= type.name %><br>
+  <% end %>
+  <b>Distance:</b> <%= workout.distance %><br>
+  <b>Time:</b> <%= workout.time %><br>
 <% end %>
+
+<br></br>
+
+<a href="/workouts/new">Create a New Workout </a>

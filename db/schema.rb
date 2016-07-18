@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 20160714214230) do
 
   create_table "run_types", force: :cascade do |t|
-    t.string  "type"
+    t.string  "name"
     t.integer "workout_id"
   end
 
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160714214230) do
   end
 
   create_table "workouts", force: :cascade do |t|
+    t.integer "effort"
     t.float   "distance"
     t.date    "day"
     t.string  "time"
