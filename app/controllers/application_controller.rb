@@ -100,6 +100,7 @@ class ApplicationController < Sinatra::Base
 
   # VIEW ONLY THE SPECIFIC WORKOUT 
   get '/workouts/:id' do
+    puts params
     if logged_in?
       @workout = Workout.find_by(id: params[:id])
       erb :'/workouts/show_workout'
@@ -119,6 +120,7 @@ class ApplicationController < Sinatra::Base
   end
 
   patch '/workouts/:id' do
+    puts params
     @workout = Workout.find_by(id: params[:id])
     @workout.update(params[:workout])
     @workout.save
@@ -127,8 +129,9 @@ class ApplicationController < Sinatra::Base
 
   # DELETE A WORKOUT
   delete '/workouts/:id/delete' do
+    puts params
     @workout = Workout.find_by(id: params[:id])
-    if logged_in? && @workout.runner_id == current_user.id
+    if session[:runner_id]
       @workout.destroy
       redirect '/workouts'
     else
@@ -137,16 +140,15 @@ class ApplicationController < Sinatra::Base
   end
 
 
-  # FILTER BY RUN TYPE
+  # SHOW WORKOUTS BY RUN TYPE
   get '/workouts/:slug' do
-    @workout = Workout.find_by_slug
+    @type = RunType.find_by_slug(params[:slug])
     if current_user
-      erb :/
+      erb :'/workouts/show_by_runtype'
+    else
+      redirect '/'
+    end
   end
-
-
-
-
 
 
   # HELPER METHODS
