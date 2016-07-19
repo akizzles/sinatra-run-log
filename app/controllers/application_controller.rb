@@ -122,7 +122,7 @@ class ApplicationController < Sinatra::Base
   patch '/workouts/:id' do
     puts params
     @workout = Workout.find_by(id: params[:id])
-    @workout.update(params[:workout])
+    @workout.update(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time])
     @workout.save
     redirect to "/workouts/#{@workout.id}"
   end

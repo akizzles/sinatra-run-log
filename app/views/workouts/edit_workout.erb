@@ -3,6 +3,34 @@
 <form action="/workouts/<%=@workout.id%>" method="POST">
   <input type="hidden" name="_method" value='patch'>
 
+  <label>Date</label>
+  <input type="date" name="day" id='day' value="<%=@workout.day%>">
+
+  <label>Effort Level (1-10)</label>
+  <input type="integer" name="effort_level" id='effort_level' value="<%=@workout.effort%>">
+
+  <label>Distance (# Miles)</label>
+  <input type="text" name="distance" id='distance' value="<%=@workout.distance%>">
+
+  <label>Duration (HH:MM:SS)</label>
+  <input type="text" name="time" id='time' value="<%=@workout.time%>">
+  <br></br>
+  <label>Please Select One of the Following Run Types:</label><br>
+  <input type="radio" name="type" value="Day Off"> Day Off<br>
+  <input type="radio" name="type" value="Easy Run"> Easy Run<br>
+  <input type="radio" name="type" value="Regular Run"> Regular Run<br>
+  <input type="radio" name="type" value="Regular Run AYF"> Regular Run AYF<br>
+  <input type="radio" name="type" value="Long Run"> Long Run<br>
+  <input type="radio" name="type" value="Pseduo LR"> Pseudo Long Run<br>
+  <input type="radio" name="type" value="Tempo"> Tempo<br>
+  <input type="radio" name="type" value="Fartlek"> Fartlek<br>
+  <input type="radio" name="type" value="Intervals"> Intervals<br>
+  <input type="radio" name="type" value="Hills"> Hills<br>
+  <input type="radio" name="type" value="Race"> Race<br>
+  <input type="radio" name="type" value="Cross Train"> Cross Train<br>
+  <input type="radio" name="type" value="Sick"> Sick<br>
+  <input type="radio" name="type" value="Injured"> Injured<br>
+
   <input type="submit" value="submit">
 
 </form>
