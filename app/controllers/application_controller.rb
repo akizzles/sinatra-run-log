@@ -69,8 +69,14 @@ class ApplicationController < Sinatra::Base
   # LIST OF RUNNER'S WORKOUTS
   get '/workouts' do
     if logged_in?
-      @workouts = Workout.all
-      erb :'/workouts/workouts'
+      @workouts = Workout.where(runner_id: session[:runner_id])
+      binding.pry
+      # binding.pry
+      if @workouts == nil
+        redirect '/workouts/new'
+      else
+        erb :'/workouts/workouts'
+      end
     else
       redirect '/login'
     end
@@ -90,9 +96,10 @@ class ApplicationController < Sinatra::Base
     if params[:day] == "" || params[:type] == ""
       redirect '/workouts/new'
     else
-      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: current_user.id)
+      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: session[:runner_id])
       @workout.run_types << RunType.new(name: params[:type])
       session[:workout_id] = @workout.id
+      binding.pry
       redirect '/workouts'
     end
 
@@ -141,14 +148,15 @@ class ApplicationController < Sinatra::Base
 
 
   # SHOW WORKOUTS BY RUN TYPE
-  get '/workouts/:slug' do
-    @type = RunType.find_by_slug(params[:slug])
-    if current_user
-      erb :'/workouts/show_by_runtype'
-    else
-      redirect '/'
-    end
-  end
+  # get '/workouts/:slug' do
+  #   binding.pry
+  #   @workout = Workout.where(runner_id: current_user.id).find_by_slug(params[:slug])
+  #   if current_user
+  #     erb :'/workouts/show_by_runtype'
+  #   else
+  #     redirect '/'
+  #   end
+  # end
 
 
   # HELPER METHODS
