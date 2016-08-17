@@ -1,0 +1,6 @@
+<h4>Workouts for <%= @runner.username %></h4><br></br>
+<% @runner.workouts.each do |workout| %>
+  <ul>
+    <li><a href='/workouts/<%=workout.id %>'><%= workout.run_type.name %></a></li>
+  </ul>
+<% end %>

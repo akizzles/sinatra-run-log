@@ -217,7 +217,9 @@ class ApplicationController < Sinatra::Base
     def redirect_if_not_logged_in
       if !logged_in?
         redirect "/login?error=You are not logged in"
+      end
     end
+
     def logged_in?
       !!session[:runner_id]
     end

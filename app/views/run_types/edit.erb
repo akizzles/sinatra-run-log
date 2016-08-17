@@ -1,0 +1,28 @@
+<h1>Edit <%= @run_type.name %></h1>
+
+<form action="/runtypes/<%=@run_type.id %>" method="POST">
+  <label>Please Select One of the Following Run Types:</label><br>
+  <input type="radio" name="type" value="Day Off"> Day Off<br>
+  <input type="radio" name="type" value="Easy Run"> Easy Run<br>
+  <input type="radio" name="type" value="Regular Run"> Regular Run<br>
+  <input type="radio" name="type" value="Regular Run AYF"> Regular Run AYF<br>
+  <input type="radio" name="type" value="Long Run"> Long Run<br>
+  <input type="radio" name="type" value="Pseduo LR"> Pseudo Long Run<br>
+  <input type="radio" name="type" value="Tempo"> Tempo<br>
+  <input type="radio" name="type" value="Fartlek"> Fartlek<br>
+  <input type="radio" name="type" value="Intervals"> Intervals<br>
+  <input type="radio" name="type" value="Hills"> Hills<br>
+  <input type="radio" name="type" value="Race"> Race<br>
+  <input type="radio" name="type" value="Cross Train"> Cross Train<br>
+  <input type="radio" name="type" value="Sick"> Sick<br>
+  <input type="radio" name="type" value="Injured"> Injured<br>
+
+  <label> Please select the workout </label>
+  <select name="workout_id">
+    <% current_user.workouts.each do |workout| %>
+      <option value=<%=workout.id %> <%= "selected" if workout.id==@run_type.workout.id %> ><%= run_type.name %></option>
+    <% end %>
+  </select>
+
+  <input type="submit" value="Update">
+</form>

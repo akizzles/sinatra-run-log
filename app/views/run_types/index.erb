@@ -1,0 +1,10 @@
+<% @run_types.each do |type| %>
+  <%= type.name %><br />
+  <%= type.workout.day %> <br />
+  <%= type.workout.distane %> <br />
+  <%= type.workout.time %> <br />
+  <%= type.workout.effort %> <br />
+  <a href="/runtypes/<%=type.id%>/edit">Edit</a>
+  <br />
+  <br />
+<% end %>

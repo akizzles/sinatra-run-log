@@ -10,6 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20160714214230) do
+
+  create_table "run_types", force: :cascade do |t|
+    t.string  "name"
+    t.integer "workout_id"
+  end
+
+  create_table "runners", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+  end
+
+  create_table "workouts", force: :cascade do |t|
+    t.integer "effort"
+    t.float   "distance"
+    t.date    "day"
+    t.string  "time"
+    t.integer "runner_id"
+  end
 
 end
