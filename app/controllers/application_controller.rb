@@ -68,38 +68,30 @@ class ApplicationController < Sinatra::Base
 
   # LIST OF RUNNER'S WORKOUTS
   get '/workouts' do
-    if logged_in?
-      @workouts = Workout.where(runner_id: session[:runner_id])
-      binding.pry
-      # binding.pry
-      if @workouts == nil
-        redirect '/workouts/new'
-      else
-        erb :'/workouts/workouts'
-      end
+    puts params
+    redirect_if_not_logged_in
+    @workouts = Workout.all
+    if @workouts == nil
+      redirect '/workouts/new'
     else
-      redirect '/login'
+      erb :'/workouts/workouts'
     end
   end
 
   # CREATE A NEW RUNNING WORKOUT
   get '/workouts/new' do
-    if logged_in?
-      erb :'/workouts/create_workout'
-    else
-      redirect '/login'
-    end
+    redirect_if_not_logged_in
+    @error_message = params[:error]
+    erb :'/workouts/create_workout'
   end
 
   post '/workouts' do
     puts params
+    redirect_if_not_logged_in
     if params[:day] == "" || params[:type] == ""
-      redirect '/workouts/new'
+      redirect '/workouts/new?error=please fill in the workout date and type'
     else
-      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: session[:runner_id])
-      @workout.run_types << RunType.new(name: params[:type])
-      session[:workout_id] = @workout.id
-      binding.pry
+      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: current_user.id)
       redirect '/workouts'
     end
 
@@ -108,30 +100,30 @@ class ApplicationController < Sinatra::Base
   # VIEW ONLY THE SPECIFIC WORKOUT 
   get '/workouts/:id' do
     puts params
-    if logged_in?
-      @workout = Workout.find_by(id: params[:id])
-      erb :'/workouts/show_workout'
-    else
-      redirect '/login'
-    end
+    redirect_if_not_logged_in
+    @workout = Workout.find(params[:id])
+    erb :'/workouts/show_workout'
   end
 
   # EDIT A WORKOUT
   get '/workouts/:id/edit' do
-    @workout = Workout.find_by(id: params[:id])
-    if logged_in?
-      erb :'/workouts/edit_workout'
-    else
-      redirect '/login'
-    end
+    redirect_if_not_logged_in
+    @error_message = params[:error]
+    @workout = Workout.find(params[:id])
+    erb :'/workouts/edit_workout'
   end
 
   patch '/workouts/:id' do
     puts params
-    @workout = Workout.find_by(id: params[:id])
-    @workout.update(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time])
-    @workout.save
-    redirect to "/workouts/#{@workout.id}"
+    redirect_if_not_logged_in
+    @workout = Workout.find(params[:id])
+    if params[:day] == "" || params[:type] == ""
+      redirect "/workouts/#{@workout.id}/edit?error=please fill in the workout date and type"
+    else
+      @workout.update(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time])
+      @workout.save
+      redirect to "/workouts/#{@workout.id}"
+    end
   end
 
   # DELETE A WORKOUT
@@ -161,6 +153,11 @@ class ApplicationController < Sinatra::Base
 
   # HELPER METHODS
   helpers do
+
+    def redirect_if_not_logged_in
+      if !logged_in?
+        redirect "/login?error=You are not logged in"
+    end
     def logged_in?
       !!session[:runner_id]
     end
