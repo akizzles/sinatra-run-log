@@ -14,8 +14,10 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
-  #LOGIN
+
+  # LOGIN
   get '/login' do
+    @error_message = params[:error]
     if logged_in?
       redirect '/workouts'
     else
@@ -35,10 +37,10 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  # CREATE A NEW ACCOUNT
+  # NEW ACCOUNT SIGNUP
   get '/signup' do
-    if !logged_in?
-      erb :'/runners/create_runner'
+    if !session[:runner_id]
+      erb :'/runners/new'
     else
       redirect '/logout'
     end
@@ -56,6 +58,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+  # LOGOUT
   get '/logout' do
     if logged_in?
       session.clear
@@ -65,8 +68,22 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+  # RUNNER LOOKUP
 
-  # LIST OF RUNNER'S WORKOUTS
+  get '/runner/:id' do
+    if !logged_in?
+      redirect '/'
+    end
+
+    @runner = Runner.find(params[:id])
+    if !@runner.nil? && @runner == current_user
+      erb :'runners/show'
+    else
+      redirect '/'
+    end
+  end
+
+  # LIST OF WORKOUTS
   get '/workouts' do
     puts params
     redirect_if_not_logged_in
@@ -74,7 +91,7 @@ class ApplicationController < Sinatra::Base
     if @workouts == nil
       redirect '/workouts/new'
     else
-      erb :'/workouts/workouts'
+      erb :'/workouts/index'
     end
   end
 
@@ -82,7 +99,7 @@ class ApplicationController < Sinatra::Base
   get '/workouts/new' do
     redirect_if_not_logged_in
     @error_message = params[:error]
-    erb :'/workouts/create_workout'
+    erb :'/workouts/new'
   end
 
   post '/workouts' do
@@ -102,7 +119,7 @@ class ApplicationController < Sinatra::Base
     puts params
     redirect_if_not_logged_in
     @workout = Workout.find(params[:id])
-    erb :'/workouts/show_workout'
+    erb :'/workouts/show'
   end
 
   # EDIT A WORKOUT
@@ -110,7 +127,7 @@ class ApplicationController < Sinatra::Base
     redirect_if_not_logged_in
     @error_message = params[:error]
     @workout = Workout.find(params[:id])
-    erb :'/workouts/edit_workout'
+    erb :'/workouts/edit'
   end
 
   patch '/workouts/:id' do
@@ -138,6 +155,49 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+
+ # RUN TYPE
+
+ get "/runtypes" do
+  redirect_if_not_logged_in
+  @run_types = RunType.all
+  erb :'run_types/index'
+ end
+
+ get "/runtypes/new" do
+  redirect_if_not_logged_in
+  @error_message = params[:error]
+  erb :'run_types/new'
+ end
+
+ get "/runtypes/:id/edit" do
+  redirect_if_not_logged_in
+  @error_message = params[:error]
+  @run_type = RunType.find(params[:id])
+  erb :'run_types/edit'
+ end
+
+ post "/runtypes/:id" do
+  redirect_if_not_logged_in
+  @run_type = RunType.find(params[:id])
+  if params[:type].empty?
+    redirect "/runtypes/#{@run_type.id}/edit?error=please select a run type"
+  else
+    @run_type.update(name: params[:name])
+  end
+ end
+
+ get "runtypes/:id" do
+  redirect_if_not_logged_in
+  @run_type = RunType.find(params[:id])
+  erb :'run_types/show'
+ end
+
+ post "/runtypes" do
+  redirect_if_not_logged_in
+  RunType.create(params)
+  redirect "/runtypes"
+ end
 
   # SHOW WORKOUTS BY RUN TYPE
   # get '/workouts/:slug' do
