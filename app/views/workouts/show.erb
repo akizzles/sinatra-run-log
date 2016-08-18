@@ -1,14 +1,15 @@
+<h2>Workout Details for <%= @workout.runner.username.capitalize %> </h2>
 WORKOUT# <%= @workout.id %><br>
 DATE: <%= @workout.day %><br>
-<% @workout.run_types.each do |type| %>
-  RUN TYPE: <%= type.name %><br>
-<% end %>
+RUN TYPE: <%= @workout.run_type.name %><br>
 DISTANCE: <%= @workout.distance %><br>
 DURATION: <%= @workout.time %><br>
+<a href="/workouts/<%=@workout.id%>/edit">Edit Workout </a>
+
+<br></br>
 
 <form action='/workouts/<%= @workout.id%>/delete' method='POST'>
   <input type="hidden" name="_method" id="hidden" value="DELETE">
   <input type="submit" value="Delete Workout">
 </form>
 
-<a href="/workouts/<%=@workout.id%>/edit">Edit Workout </a>

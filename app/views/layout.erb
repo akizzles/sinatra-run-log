@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Runner's Log</title>
   </head>
 
-  <body>
-    <%= yield %>
+  <body>  
+    <div class="container">
+      <% if !@error_message.nil? %>
+      <div class="alert alert-warning">
+        <%= @error_message %>
+      </div>
+    <% end %>
+      <%= yield %> 
+    </div>
+    <br></br>
+    <nav>
+      <% if logged_in? %>
+        <a href="/logout"> Log Out </a>
+      <% end %>
+      </nav>
+
   </body>
 </html>
