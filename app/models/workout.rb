@@ -1,6 +1,6 @@
 class Workout < ActiveRecord::Base
   belongs_to :runner
-  has_many :run_types
+  has_one :run_type
 
     def slug
     self.name.downcase.gsub(" ","-")

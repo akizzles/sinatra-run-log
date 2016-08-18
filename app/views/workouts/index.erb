@@ -1,4 +1,4 @@
-<b style="color:blue;"><u>Welcome, <%= current_user.username %></u></b><br>
+<b style="color:blue;"><u>Welcome, <%= current_user.username %></u></b><br></br>
 
 <% @workouts.each do |workout| %>
   <b>Workout # </b><a href='/workouts/<%=workout.id%>'><%= workout.id %></a><br>
@@ -7,7 +7,7 @@
     <b>Run Type:</b>  <%= type.name %><br>
   <% end %>
   <b>Distance:</b> <%= workout.distance %><br>
-  <b>Time:</b> <%= workout.time %><br>
+  <b>Time:</b> <%= workout.time %><br></br>
 <% end %>
 
 <br></br>

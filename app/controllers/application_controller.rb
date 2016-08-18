@@ -48,10 +48,10 @@ class ApplicationController < Sinatra::Base
 
   post '/signup' do
     puts params
-    if params[:username] == "" || params[:email] == "" || params[:password] == ""
+    if params[:username] == "" || params[:password] == ""
       redirect '/signup'
     else
-      @runner = Runner.new(username: params[:username], email: params[:email], password: params[:password])
+      @runner = Runner.new(username: params[:username], password: params[:password])
       @runner.save
       session[:runner_id] = @runner.id
       redirect '/workouts'
@@ -166,7 +166,9 @@ class ApplicationController < Sinatra::Base
 
  get "/runtypes/new" do
   redirect_if_not_logged_in
+  binding.pry
   @error_message = params[:error]
+  @workouts = Workout.all
   erb :'run_types/new'
  end
 
