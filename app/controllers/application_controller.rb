@@ -10,8 +10,11 @@ class ApplicationController < Sinatra::Base
 
   # HOME PAGE
   get '/' do
-    session.clear
-    erb :index
+    if logged_in?
+      redirect '/workouts'
+    else
+      erb :index
+    end
   end
 
 
@@ -39,7 +42,7 @@ class ApplicationController < Sinatra::Base
 
   # NEW ACCOUNT SIGNUP
   get '/signup' do
-    if !logged_in?
+    if !logged_in
       erb :'/runners/new'
     else
       redirect '/logout'
@@ -49,7 +52,7 @@ class ApplicationController < Sinatra::Base
   post '/signup' do
     puts params
     if params[:username] == "" || params[:password] == ""
-      redirect '/signup'
+      erb :'runners/new'
     else
       @runner = Runner.new(username: params[:username], password: params[:password])
       @runner.save
@@ -85,7 +88,7 @@ class ApplicationController < Sinatra::Base
   get '/workouts' do
     puts params
     redirect_if_not_logged_in
-    @workouts = Workout.all
+    @workouts = current_user.workouts
     if @workouts.nil?
       redirect '/workouts/new'
     else
@@ -99,8 +102,8 @@ class ApplicationController < Sinatra::Base
     if params[:day] == "" || params[:type] == ""
       redirect '/workouts/new?error=please fill in the workout date and type'
     else
-      @workout = Workout.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time], runner_id: current_user.id)
-      @workout.run_type = RunType.create(name: params[:type], workout_id: @workout.id, runner_id: current_user.id)
+      @workout = current_user.workouts.create(day: params[:day], effort: params[:effort_level], distance: params[:distance], time: params[:time])
+      @workout.build_run_type(name: params[:type])
       redirect '/workouts'
     end
   end

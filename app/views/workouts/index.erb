@@ -1,15 +1,13 @@
 <b style="color:blue;"><u>Welcome, <%= current_user.username %></u></b><br></br>
 
 <% @workouts.each do |workout| %>
-  <% if current_user.username == workout.runner.username %>
-    <b>Workout # </b><a href='/workouts/<%=workout.id%>'><%= workout.id %></a><br>
-    <b>Date: </b><%= workout.day %><br>
-    <b>Run Type: </b><%= workout.run_type.name %><br>
-    <b>Distance: </b> <%= workout.distance %><br>
-    <b>Time: </b> <%= workout.time %><br>
-    <b>Effort: </b> <%= workout.effort %><br>
-    -----<br>
-  <% end %>
+  <b>Workout # </b><a href='/workouts/<%=workout.id%>'><%= workout.id %></a><br>
+  <b>Date: </b><%= workout.day %><br>
+  <b>Run Type: </b><%= workout.run_type.name %><br>
+  <b>Distance: </b> <%= workout.distance %><br>
+  <b>Time: </b> <%= workout.time %><br>
+  <b>Effort: </b> <%= workout.effort %><br>
+  -----<br>
   
 <% end %>
 
